@@ -30,7 +30,6 @@ class Entity(db.Model):
             dict: A dictionary containing the entity's data.
         """
         return {
-            'id': str(self.id),
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat()
         }
