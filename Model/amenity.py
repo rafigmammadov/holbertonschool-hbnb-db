@@ -12,6 +12,11 @@ class Amenity(db.Model, EntityMixin):
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=True)
 
+    def __init__(self, name, description):
+        super().__init__()
+        self.name = name
+        self.description = description
+
     def __repr__(self):
         return (f"Amenity(name={self.name}, description='{self.description}')")
 

@@ -16,19 +16,27 @@ iso_3166_1_data = load_iso_3166_1_data()
 class Country(db.Model, EntityMixin):
     __tablename__ = 'countries'
 
-    _country_code = db.Column('country_code', db.String(2), unique=True, nullable=False)
+    country_code = db.Column('country_code', db.String(2), unique=True, nullable=False)
     name = db.Column(db.String(255), nullable=False)
     cities = relationship('City', backref='country', lazy=True)
 
+    def __init__(self, country_code, name):
+        if country_code not in iso_3166_1_data:
+            raise ValueError(f"Invalid country code: {country_code}")
+
+        self.country_code = country_code
+        self.name = name
+        self.cities = []
+
     @hybrid_property
     def country_code(self):
-        return self._country_code
+        return self.country_code
 
     @country_code.setter
     def country_code(self, value):
         if value not in iso_3166_1_data:
             raise ValueError(f"Invalid country code: {value}")
-        self._country_code = value
+        self.country_code = value
 
     def add_city(self, city):
         self.cities.append(city)

@@ -18,6 +18,13 @@ class Users(db.Model, EntityMixin):
     is_admin = db.Column(db.Boolean, default=False)
     password_hash = db.Column(db.String(255), nullable=False)
 
+    def __init__(self, email, first_name, last_name, password_hash):
+        super().__init__()
+        self.email = email
+        self.first_name = first_name
+        self.last_name = last_name
+        self.password_hash = password_hash
+
     def set_password(self, password):
          self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 

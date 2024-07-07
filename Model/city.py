@@ -10,9 +10,13 @@ import uuid
 class City(db.Model, EntityMixin):
     __tablename__ = 'cities'
 
-    country = db.Column(db.String(255), nullable=False)
+    country = db.Column(db.String, db.ForeignKey('countries.country_code'), nullable=False)
     name = db.Column(db.String(255), nullable=False)
-    country = db.relationship("Country", backref="cities")
+
+    def __init__(self, country, name):
+        super().__init__()
+        self.country = country
+        self.name = name
 
     def __repr__(self):
         return (f"City(country={self.country}, name='{self.name}')")

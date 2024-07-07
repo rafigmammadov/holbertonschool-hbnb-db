@@ -28,6 +28,14 @@ class EntityMixin:
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    def __init__(self):
+        self.id = uuid.uuid4()
+        gmt4_offset = timedelta(hours=-4)
+        gmt4 = timezone(gmt4_offset)
+        now = datetime.now(gmt4)
+        self.created_at = now
+        self.updated_at = now
+
     def to_dict(self):
         """
         Converts the EntityMixin instance to a dictionary representation.
@@ -44,3 +52,6 @@ class EntityMixin:
 
 class Entity(db.Model, EntityMixin):
     __tablename__ = 'entities'
+
+    def __init__(self):
+        super().__init__()
