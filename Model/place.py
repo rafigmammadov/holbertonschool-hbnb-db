@@ -17,7 +17,8 @@ place_amenity_association = db.Table('place_amenity_association',
 
 
 class Place(db.Model, Entity):
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    __tablename__ = 'place'
+
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=True)
     address = db.Column(db.String(255), nullable=False)

@@ -12,8 +12,7 @@ bcrypt = Bcrypt(app)
 
 class Users(Entity):
     __tablename__ = 'users'
-    
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+
     email = db.Column(db.String(255), nullable=False, unique=True)
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)

@@ -15,8 +15,7 @@ iso_3166_1_data = load_iso_3166_1_data()
 
 class Country(Entity):
     __tablename__ = 'countries'
-    
-    id = db.Column(db.Integer, primary_key=True)
+
     _country_code = db.Column('country_code', db.String(2), unique=True, nullable=False)
     name = db.Column(db.String(255), nullable=False)
     cities = relationship('City', backref='country', lazy=True)

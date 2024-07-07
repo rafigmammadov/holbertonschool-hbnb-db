@@ -12,8 +12,7 @@ db = SQLAlchemy()
 
 class Reviews(Entity):
     __tablename__ = 'reviews'
-    
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+
     place_id = db.Column(UUID(as_uuid=True), db.ForeignKey('places.id'), nullable=False)
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id'), nullable=False)
     rating = db.Column(db.Integer, nullable=False)

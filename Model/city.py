@@ -8,7 +8,8 @@ import uuid
 
 
 class City(Entity):
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    __tablename__ = 'cities'
+
     country = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(255), nullable=False)
 
