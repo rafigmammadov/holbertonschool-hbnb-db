@@ -1,4 +1,4 @@
-CREATE TABLE amenity (
+CREATE TABLE amenities (
     id INTEGER PRIMARY KEY,
     name VARCHAR(128) NOT NULL,
     description TEXT,
