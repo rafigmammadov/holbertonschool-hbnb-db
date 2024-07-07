@@ -10,7 +10,7 @@ import uuid
 class City(db.Model, EntityMixin):
     __tablename__ = 'cities'
 
-    country = db.Column(db.String, db.ForeignKey('countries.country_code'), nullable=False)
+    country = db.Column(db.String, db.ForeignKey('countries.code'), nullable=False)
     name = db.Column(db.String(255), nullable=False)
 
     def __init__(self, country, name):

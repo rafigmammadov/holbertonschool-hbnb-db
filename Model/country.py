@@ -5,49 +5,30 @@ Module that contains Country Model
 import json
 from .entity import EntityMixin, db
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.hybrid import hybrid_property
-
-def load_iso_3166_1_data(filepath='countries.json'):
-    with open(filepath, 'r') as file:
-        return json.load(file)
-
-iso_3166_1_data = load_iso_3166_1_data()
 
 class Country(db.Model, EntityMixin):
     __tablename__ = 'countries'
 
-    country_code = db.Column('country_code', db.String(2), unique=True, nullable=False)
+    code = db.Column(db.String, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     cities = relationship('City', backref='country', lazy=True)
 
-    def __init__(self, country_code, name):
-        if country_code not in iso_3166_1_data:
-            raise ValueError(f"Invalid country code: {country_code}")
+    def __init__(self, code, name):
 
-        self.country_code = country_code
+        self.code = code
         self.name = name
         self.cities = []
-
-    @hybrid_property
-    def country_code(self):
-        return self.country_code
-
-    @country_code.setter
-    def country_code(self, value):
-        if value not in iso_3166_1_data:
-            raise ValueError(f"Invalid country code: {value}")
-        self.country_code = value
 
     def add_city(self, city):
         self.cities.append(city)
 
     def __repr__(self):
-        return (f"Country(id={self.id}, country_code='{self.country_code}', name='{self.name}', cities={self.cities})")
+        return (f"Country(id={self.id}, code='{self.code}', name='{self.name}', cities={self.cities})")
 
     def to_dict(self):
         data = super().to_dict()
         data.update({
-            'country_code': self.country_code,
+            'code': self.code,
             'name': self.name,
             'cities': [city.to_dict() for city in self.cities]
         })

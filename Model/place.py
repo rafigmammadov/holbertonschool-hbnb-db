@@ -2,13 +2,11 @@
 """
 Module that contains Place Model
 """
-from .entity import EntityMixin
+from .entity import db, EntityMixin
 import json
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-
-db = SQLAlchemy()
 
 place_amenity_association = db.Table('place_amenity_association',
     db.Column('place_id', UUID(as_uuid=True), db.ForeignKey('places.id'), primary_key=True),
@@ -17,7 +15,7 @@ place_amenity_association = db.Table('place_amenity_association',
 
 
 class Place(db.Model, EntityMixin):
-    __tablename__ = 'place'
+    __tablename__ = 'places'
 
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=True)
