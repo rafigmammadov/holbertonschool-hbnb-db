@@ -6,9 +6,8 @@ from .entity import Entity, db
 from sqlalchemy.dialects.postgresql import UUID
 from flask_bcrypt import Bcrypt
 import uuid
-from app import app
 
-bcrypt = Bcrypt(app)
+bcrypt = Bcrypt()
 
 class Users(Entity):
     __tablename__ = 'users'
