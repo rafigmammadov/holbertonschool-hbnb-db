@@ -2,14 +2,14 @@
 """
 Module that contains Users Model
 """
-from .entity import Entity, db
+from .entity import EntityMixin, db
 from sqlalchemy.dialects.postgresql import UUID
 from flask_bcrypt import Bcrypt
 import uuid
 
 bcrypt = Bcrypt()
 
-class Users(Entity):
+class Users(db.Model, EntityMixin):
     __tablename__ = 'users'
 
     email = db.Column(db.String(255), nullable=False, unique=True)

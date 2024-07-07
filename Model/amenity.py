@@ -2,11 +2,11 @@
 """
 Module that contains Amenity Model
 """
-from .entity import Entity, db
+from .entity import EntityMixin, db
 import json
 
 
-class Amenity(Entity):
+class Amenity(db.Model, EntityMixin):
     __tablename__ = 'amenities'
 
     name = db.Column(db.String(255), nullable=False)

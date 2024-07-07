@@ -2,15 +2,13 @@
 """
 Module that contains Reviews Model
 """
-from .entity import Entity
+from .entity import EntityMixin, db
 import json
 from sqlalchemy.dialects.postgresql import UUID
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 
-db = SQLAlchemy()
-
-class Reviews(Entity):
+class Reviews(db.Model, EntityMixin):
     __tablename__ = 'reviews'
 
     place_id = db.Column(UUID(as_uuid=True), db.ForeignKey('places.id'), nullable=False)

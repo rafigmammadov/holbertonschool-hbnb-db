@@ -15,22 +15,32 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-class Entity(db.Model):
-    __tablename__ = 'entities'
+# entity_mixin.py
+import uuid
+from datetime import datetime
+from sqlalchemy.dialects.postgresql import UUID
+from flask_sqlalchemy import SQLAlchemy
 
+db = SQLAlchemy()
+
+class EntityMixin:
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=False,
-                        default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def to_dict(self):
         """
-        Converts the Entity instance to a dictionary representation.
+        Converts the EntityMixin instance to a dictionary representation.
 
         Returns:
             dict: A dictionary containing the entity's data.
         """
         return {
+            'id': str(self.id),
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat()
         }
+
+
+class Entity(db.Model, EntityMixin):
+    __tablename__ = 'entities'

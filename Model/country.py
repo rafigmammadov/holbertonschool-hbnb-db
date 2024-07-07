@@ -3,7 +3,7 @@
 Module that contains Country Model
 """
 import json
-from .entity import Entity, db
+from .entity import EntityMixin, db
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -13,7 +13,7 @@ def load_iso_3166_1_data(filepath='countries.json'):
 
 iso_3166_1_data = load_iso_3166_1_data()
 
-class Country(Entity):
+class Country(db.Model, EntityMixin):
     __tablename__ = 'countries'
 
     _country_code = db.Column('country_code', db.String(2), unique=True, nullable=False)
