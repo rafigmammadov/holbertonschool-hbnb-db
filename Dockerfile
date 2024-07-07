@@ -3,7 +3,7 @@ FROM python:3.8-slim-buster
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN mkdir /app
+RUN mkdir /
 WORKDIR /app
 
 COPY requirements.txt /app/
