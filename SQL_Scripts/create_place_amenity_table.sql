@@ -1,0 +1,10 @@
+CREATE TABLE place_amenity (
+    id INTEGER PRIMARY KEY,
+    place_id INTEGER NOT NULL,
+    amenity_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (place_id, amenity_id),
+    FOREIGN KEY (place_id) REFERENCES place(id) ON DELETE CASCADE,
+    FOREIGN KEY (amenity_id) REFERENCES amenity(id) ON DELETE CASCADE
+);
