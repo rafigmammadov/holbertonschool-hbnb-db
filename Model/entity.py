@@ -10,6 +10,7 @@ Base class for all entities in the application. This class provides
 """
 import uuid
 from datetime import datetime, timedelta, timezone
+from sqlalchemy.dialects.postgresql import UUID
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
