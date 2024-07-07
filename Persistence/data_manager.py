@@ -14,17 +14,14 @@ class UUIDEncoder(json.JSONEncoder):
         return super().default(obj)
 
 class DataManager:
-    def __init__(self, filename="database.json", use_database=False):
+    def __init__(self, db=None, filename="database.json", use_database=False):
         self.filename = filename
         self.use_database = use_database
+        self.db = db
 
         if not self.use_database and not os.path.exists(self.filename):
             with open(self.filename, 'w') as file:
                 json.dump({}, file)
-
-        if self.use_database:
-            from app import db
-            self.db = db
 
     def _read_data(self):
         if self.use_database:
