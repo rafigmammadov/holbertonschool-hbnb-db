@@ -6,6 +6,7 @@ from flask_restx import Api, Resource, fields, Namespace
 from Model.users import Users
 from Model.entity import db
 from Persistence.data_manager import DataManager
+from Decorators.utils import admin_required
 
 app = Flask(__name__)
 api = Api(app, version='1.0', title='User API', description='A simple User API')
@@ -39,6 +40,8 @@ user_login_model = ns_users.model('UserLogin', {
 class UserList(Resource):
     @ns_users.doc('list_users')
     @ns_users.marshal_list_with(user_response_model)
+    @jwt_required()
+    @admin_required
     def get(self):
         users = []
         data = data_manager._read_data()
@@ -50,11 +53,8 @@ class UserList(Resource):
     @ns_users.expect(user_request_model)
     @ns_users.marshal_with(user_response_model, code=201)
     @jwt_required()
+    @admin_required
     def post(self):
-        current_user = get_jwt_identity()
-        if current_user != os.environ.get('ADMIN_EMAIL'):
-            return jsonify({"msg": "Admins only!"}), 403
-
         data = request.get_json()
         try:
             email = data['email']
@@ -83,6 +83,8 @@ class UserList(Resource):
 class User(Resource):
     @ns_users.doc('get_user')
     @ns_users.marshal_with(user_response_model)
+    @jwt_required()
+    @admin_required
     def get(self, user_id):
         user = data_manager.get(user_id, 'Users')
         if user:
@@ -93,6 +95,8 @@ class User(Resource):
     @ns_users.doc('update_user')
     @ns_users.expect(user_request_model)
     @ns_users.marshal_with(user_response_model)
+    @jwt_required()
+    @admin_required
     def put(self, user_id):
         data = request.get_json()
         try:
@@ -117,17 +121,15 @@ class User(Resource):
     @ns_users.doc('delete_user')
     @ns_users.response(204, 'User deleted')
     @jwt_required()
+    @admin_required
     def delete(self, user_id):
-        current_user = get_jwt_identity()
-        if current_user != os.environ.get('ADMIN_EMAIL'):
-            return jsonify({"msg": "Admins only!"}), 403
-
         user = data_manager.get(user_id, 'Users')
         if not user:
             api.abort(404, "User not found.")
 
         data_manager.delete(user_id, 'Users')
         return '', 204
+
 
 @ns_users.route('/login')
 class UserLogin(Resource):
@@ -148,6 +150,7 @@ class UserLogin(Resource):
 
         access_token = create_access_token(identity=user.id)
         return jsonify(access_token=access_token), 200
+
 
 if __name__ == '__main__':
     app.run(debug=True)
