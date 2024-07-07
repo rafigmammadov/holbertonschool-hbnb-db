@@ -1,4 +1,4 @@
-CREATE TABLE city (
+CREATE TABLE cities (
     id INTEGER  PRIMARY KEY,
     country VARCHAR(36) NOT NULL,
     name VARCHAR(256) NOT NULL,
