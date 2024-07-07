@@ -4,6 +4,8 @@ from flask_restx import Api, Resource, fields, Namespace
 from Model.place import Place
 from Persistence.data_manager import DataManager
 from Model.city import City
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from Decorators.utils import admin_required
 
 app = Flask(__name__)
 api = Api(app, version='1.0', title='Place API', description='API for managing places')
@@ -63,6 +65,8 @@ class PlaceList(Resource):
     @ns_places.doc('create_place')
     @ns_places.expect(place_request_model)
     @ns_places.marshal_with(place_response_model, code=201)
+    @jwt_required()
+    @admin_required
     def post(self):
         data = request.get_json()
         try:
@@ -90,6 +94,53 @@ class PlaceList(Resource):
 
         except KeyError:
             api.abort(400, "Invalid input format.")
+
+    @ns_places.doc('update_place')
+    @ns_places.expect(place_request_model)
+    @ns_places.marshal_with(place_response_model)
+    @jwt_required()
+    @admin_required
+    def put(self, place_id):
+        data = request.get_json()
+        try:
+            if not data_manager.get(place_id, 'Place'):
+                api.abort(404, "Place not found.")
+
+            if not data_manager.get_by_field('id', data['city_id'], 'City'):
+                api.abort(404, f"City with ID '{data['city_id']}' not found.")
+
+            updated_place = Place(
+                name=data['name'],
+                description=data['description'],
+                address=data['address'],
+                city_id=data['city_id'],
+                latitude=data['latitude'],
+                longitude=data['longitude'],
+                host_id=data['host_id'],
+                number_of_rooms=data['number_of_rooms'],
+                bathrooms=data['bathrooms'],
+                price_per_night=data['price_per_night'],
+                max_guests=data['max_guests'],
+                amenities=data['amenity_ids']
+            )
+            updated_place.id = place_id
+
+            data_manager.update(updated_place)
+            return self.enrich_place_data(updated_place), 200
+
+        except KeyError:
+            api.abort(400, "Invalid input format.")
+
+    @ns_places.doc('delete_place')
+    @ns_places.response(204, 'Place deleted')
+    @jwt_required()
+    @admin_required
+    def delete(self, place_id):
+        if not data_manager.get(place_id, 'Place'):
+            api.abort(404, "Place not found.")
+
+        data_manager.delete(place_id, 'Place')
+        return '', 204
 
     def enrich_place_data(self, place):
         city_data = data_manager.get(place.city_id, 'City')
@@ -137,6 +188,8 @@ class PlaceDetail(Resource):
     @ns_places.doc('update_place')
     @ns_places.expect(place_request_model)
     @ns_places.marshal_with(place_response_model)
+    @jwt_required()
+    @admin_required
     def put(self, place_id):
         data = request.get_json()
         try:
@@ -170,6 +223,8 @@ class PlaceDetail(Resource):
 
     @ns_places.doc('delete_place')
     @ns_places.response(204, 'Place deleted')
+    @jwt_required()
+    @admin_required
     def delete(self, place_id):
         if not data_manager.get(place_id, 'Place'):
             api.abort(404, "Place not found.")
@@ -205,9 +260,3 @@ class PlaceDetail(Resource):
             return place_data
         else:
             return None
-
-
-api.add_namespace(ns_places)
-
-if __name__ == '__main__':
-    app.run(debug=True)
