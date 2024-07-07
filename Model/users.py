@@ -4,9 +4,11 @@ Module that contains Users Model
 """
 from .entity import Entity, db
 from sqlalchemy.dialects.postgresql import UUID
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_bcrypt import Bcrypt
 import uuid
+from app import app
 
+bcrypt = Bcrypt(app)
 
 class Users(Entity):
     __tablename__ = 'users'
@@ -19,10 +21,10 @@ class Users(Entity):
     password_hash = db.Column(db.String(255), nullable=False)
 
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+         return bcrypt.check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return (f"Users(id={self.id}, email='{self.email}', "
