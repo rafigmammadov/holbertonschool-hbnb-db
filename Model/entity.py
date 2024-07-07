@@ -16,9 +16,9 @@ db = SQLAlchemy()
 
 class Entity(db.Model):
     __tablename__ = 'entities'
-    
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
                         default=datetime.utcnow, onupdate=datetime.utcnow)
 
