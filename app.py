@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import os
 from flask import Flask
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
@@ -11,6 +12,12 @@ from API.api_amenity import ns_amenities
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///development.db'
 db = SQLAlchemy(app)
+
+if app.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite'):
+    if not os.path.exists('development.db'):
+        with app.app_context():
+            db.create_all()
+
 
 api = Api(app, version='1.0', title='HBnB API', description='HBnB application')
 api.add_namespace(ns_users)
