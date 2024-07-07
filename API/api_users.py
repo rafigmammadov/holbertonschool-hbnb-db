@@ -4,6 +4,7 @@ from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_requir
 from flask_bcrypt import bcrypt
 from flask_restx import Api, Resource, fields, Namespace
 from Model.users import Users
+from Model.entity import db
 from Persistence.data_manager import DataManager
 
 app = Flask(__name__)
@@ -11,7 +12,7 @@ api = Api(app, version='1.0', title='User API', description='A simple User API')
 
 ns_users = Namespace('users', description='User operations')
 
-data_manager = DataManager("database.json")
+data_manager = DataManager(db=db)
 
 user_request_model = ns_users.model('UserRequest', {
     'email': fields.String(required=True, description='The user email'),
@@ -27,6 +28,11 @@ user_response_model = ns_users.model('UserResponse', {
     'last_name': fields.String(description='The user last name'),
     'created_at': fields.String(description='The user creation timestamp'),
     'updated_at': fields.String(description='The user update timestamp')
+})
+
+user_login_model = ns_users.model('UserLogin', {
+    'email': fields.String(required=True, description='The user email'),
+    'password': fields.String(required=True, description='The user password')
 })
 
 @ns_users.route('/')
@@ -126,16 +132,22 @@ class User(Resource):
 @ns_users.route('/login')
 class UserLogin(Resource):
     @ns_users.doc('login_users')
+    @ns_users.expect(user_login_model)
     @ns_users.marshal_list_with(user_response_model)
     def post(self):
         email = request.json.get('email', None)
         password = request.json.get('password', None)
-        user = User.query.filter_by(email=email).first()
-        if user and bcrypt.check_password_hash(user.password, password):
-            access_token = create_access_token(identity=email)
-            return jsonify(access_token=access_token), 200
-        return 'Wrong username or password', 401
 
+        if not email or not password:
+            return jsonify({"msg": "Missing email or password"}), 400
+
+        user = Users.query.filter_by(email=email).first()
+
+        if not user or not bcrypt.check_password_hash(user.password_hash, password):
+            return jsonify({"msg": "Invalid credentials"}), 401
+
+        access_token = create_access_token(identity=user.id)
+        return jsonify(access_token=access_token), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
