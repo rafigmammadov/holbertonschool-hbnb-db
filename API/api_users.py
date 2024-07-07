@@ -5,7 +5,6 @@ from flask_bcrypt import bcrypt
 from flask_restx import Api, Resource, fields, Namespace
 from Model.users import Users
 from Persistence.data_manager import DataManager
-from app import jwt
 
 app = Flask(__name__)
 api = Api(app, version='1.0', title='User API', description='A simple User API')
