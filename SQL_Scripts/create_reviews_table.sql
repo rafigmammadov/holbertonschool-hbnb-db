@@ -1,4 +1,4 @@
-CREATE TABLE review (
+CREATE TABLE reviews (
     id INTEGER PRIMARY KEY,
     place_id VARCHAR(32) NOT NULL,
     user_id VARCHAR(32) NOT NULL,
