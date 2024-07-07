@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_restx import Api, Resource, fields, Namespace
+from flask_jwt_extended import jwt_required
 from Model.entity import db
 from Model.country import Country
 from Model.city import City
@@ -73,6 +74,7 @@ class CityGetPost(Resource):
     @ns_city.doc('post_city')
     @ns_city.expect(city_request_model)
     @ns_country.marshal_list_with(city_response_model, code=201)
+    @jwt_required()
     def post(self):
         data = request.get_json()
         try:
@@ -122,6 +124,7 @@ class CityOperationsID(Resource):
     @ns_city.doc('put_city_by_id')
     @ns_city.expect(city_request_model)
     @ns_city.marshal_list_with(city_response_model)
+    @jwt_required()
     def put(self, city_id):
         data = request.get_json()
         try:
@@ -142,6 +145,7 @@ class CityOperationsID(Resource):
     
     @ns_city.doc('delete_city')
     @ns_city.response(204, 'City deleted')
+    @jwt_required()
     def delete(self, city_id):
         city = data_manager.get(city_id, 'City')
         if not city:
