@@ -10,6 +10,11 @@ import uuid
 
 db = SQLAlchemy()
 
+place_amenity_association = db.Table('place_amenity_association',
+    db.Column('place_id', UUID(as_uuid=True), db.ForeignKey('places.id'), primary_key=True),
+    db.Column('amenity_id', UUID(as_uuid=True), db.ForeignKey('amenities.id'), primary_key=True)
+)
+
 
 class Place(db.Model, Entity):
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -24,7 +29,8 @@ class Place(db.Model, Entity):
     bathrooms = db.Column(db.Integer, nullable=False)
     price_per_night = db.Column(db.Float, nullable=False)
     max_guests = db.Column(db.Integer, nullable=False)
-    amenities = db.Column(db.Text, nullable=True)
+    amenities = db.relationship('Amenity', secondary=place_amenity_association, lazy='subquery',
+                                backref=db.backref('places', lazy=True))
 
     def __repr__(self):
         return (f"Place(id={self.id}, name='{self.name}'"
