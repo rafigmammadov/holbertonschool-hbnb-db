@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beautiful Beach House</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="/static/images/logo.png" alt="Logo" class="logo">
+        </div>
+        <nav class="nav-bar">
+            <ul>
+                <li><a href="/static/index.html">Home</a></li>
+                <li><a href="/static/place.html">Places</a></li>
+                <li><a href="/static/add_review.html">Reviews</a></li>
+            </ul>
+        </nav>
+        <div class="login-button">
+            <a href="/static/login.html">Login</a>
+        </div>
+    </header>
+    <main>
+        <h1>Modern Apartment</h1>
+            <img src="/static/images/modern_apart.jpg" class="place-image-large" alt="Place Image">
+        <div class="place-details">
+            
+            <div class="place-details-text">
+                <p><strong>Host:</strong> John Doe</p>
+                <p><strong>Price per night:</strong> $200</p>
+                <p><strong>Location:</strong> New York, United States</p>
+                <p><strong>Description:</strong> A beautiful beach house with amazing views...</p>
+                <p><strong>Amenities:</strong> WiFi, Pool, Air Conditioning</p>
+            </div>
+        </div>
+        <h2 class="reviews-heading">Reviews</h2>
+        <div class="reviews">
+            <div class="review">
+                <p><strong>Jane Smith:</strong></p>
+                <p>Great place to stay!</p>
+                <p><strong>Rating:</strong> ★★★★☆</p>
+            </div>
+            <div class="review">
+                <p><strong>Robert Brown:</strong></p>
+                <p>Amazing location and very comfortable.</p>
+                <p><strong>Rating:</strong> ★★★★★</p>
+            </div>
+        </div>
+        <div class="review-container">
+            <h2 class="h2add-review">Add a Review</h2>
+            <form action="submit_review" method="post" class="add-review form">
+                <div class="form-group">
+                    <label for="review">Your Review:</label>
+                    <textarea id="review" name="review" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="rating">Rating:</label>
+                    <select id="rating" name="rating" required>
+                        <option value="1">1 Star</option>
+                        <option value="2">2 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="5">5 Stars</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-button">Submit Review</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <p>© 2024 HBnB Evolution. All rights reserved.</p>
+    </footer>
+</body>
+</html>

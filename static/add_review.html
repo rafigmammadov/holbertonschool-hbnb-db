@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Review - HBnB</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/scripts.js" defer></script>
+</head>
+<body>
+    <header class="header-container">
+        <div class="logo">
+            <img src="/static/images/logo.png" alt="Logo" class="logo">
+        </div>
+        <nav class="nav-bar">
+            <ul>
+                <li><a href="/index">Home</a></li>
+                <li><a href="/place">Places</a></li>
+                <li><a href="/add_review">Reviews</a></li>
+            </ul>
+        </nav>
+        <div class="login-button">
+            <a href="/static/login.html">Login</a>
+        </div>
+    </header>
+    <main>
+        <section class="add-review">
+            <h1>Add a Review</h1>
+            <form id="review-form">
+                <textarea id="review-text" name="review" placeholder="Your Review" required></textarea>
+                <label for="rating">Rating:</label>
+                <select id="rating" name="rating">
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="5">5 Stars</option>
+                </select>
+                <button type="submit">Submit Review</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 HBnB Evolution. All rights reserved.</p>
+    </footer>
+</body>
+</html>
